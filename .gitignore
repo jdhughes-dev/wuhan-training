@@ -222,5 +222,6 @@ __marimo__/
 /win64ext/
 /win64ext.zip
 
-# GMDSI notebooks (cloned by scripts/get_notebooks.py)
+# Tutorial notebook repos (cloned by scripts/sync_repo.py)
 /GMDSI_notebooks/
+/mf6-training/

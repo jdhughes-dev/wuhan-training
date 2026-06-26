@@ -51,4 +51,4 @@ jobs:
         run: pixi run get-notebooks
 
       - name: Verify notebooks were cloned
-        run: pixi run python -c "import os; assert os.path.isdir(os.path.join('GMDSI_notebooks', '.git')), 'GMDSI_notebooks not cloned'; print('notebooks ok')"
+        run: pixi run python -c "import os; missing = [d for d in ('GMDSI_notebooks', 'mf6-training') if not os.path.isdir(os.path.join(d, '.git'))]; assert not missing, 'not cloned ' + str(missing); print('notebooks ok')"
