@@ -21,7 +21,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # macos-latest = Apple Silicon (osx-arm64); macos-13 = Intel (osx-64)
+        os: [ubuntu-latest, macos-latest, macos-13, windows-latest]
     steps:
       - uses: actions/checkout@v4
 
