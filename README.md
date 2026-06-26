@@ -10,6 +10,20 @@ MODFLOW 6** across Windows, Linux, and macOS (Apple Silicon and Intel).
 
 You only need to do this once per machine.
 
+> **Requires pixi ≥ 0.71.** This repo uses the newer manifest syntax and
+> lockfile format (v7); older pixi versions cannot read them.
+
+**Already have pixi?** Check your version and update if it is older than 0.71:
+
+```bash
+pixi --version
+pixi self-update          # if installed via the official installer
+```
+
+If you installed pixi through a package manager, update it the same way:
+`winget upgrade prefix-dev.pixi` (Windows) or `brew upgrade pixi` (macOS).
+If you don't have pixi yet, install it below.
+
 ### Windows (PowerShell)
 
 ```powershell
@@ -41,7 +55,7 @@ curl -fsSL https://pixi.sh/install.sh | sh
 ```
 
 After installing, **open a new terminal** so that `pixi` is on your `PATH`.
-Verify with:
+Verify with (should report 0.71 or newer):
 
 ```bash
 pixi --version
