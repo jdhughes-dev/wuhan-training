@@ -18,6 +18,10 @@ jobs:
   install:
     name: pixi install (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    env:
+      # Build MODFLOW 6 only in the explicit step below, not from the activation
+      # hook on every `pixi run`.
+      WUHAN_SKIP_MF6_BUILD: "1"
     strategy:
       fail-fast: false
       matrix:
@@ -32,8 +36,10 @@ jobs:
           locked: true
           cache: true
 
-      - name: Build/download parallel MODFLOW 6
-        run: pixi run get-mf6
+      - name: Build/download parallel MODFLOW 6 (fresh build)
+        # --force so it rebuilds even if setup-pixi restored an env from cache
+        # that still contains a previously built mf6.
+        run: pixi run get-mf6 --force
 
       - name: Verify MODFLOW 6 runs
         run: pixi run python -c "import shutil, subprocess; exe = shutil.which('mf6'); assert exe, 'mf6 not found on PATH'; print(exe); subprocess.run([exe, '-v'], check=True)"
