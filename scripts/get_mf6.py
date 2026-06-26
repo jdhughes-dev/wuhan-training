@@ -76,6 +76,13 @@ def install_unix(prefix: Path, root: Path) -> None:
     env = dict(os.environ)
     env["PKG_CONFIG_PATH"] = str(prefix / "lib" / "pkgconfig")
 
+    # Some conda-forge netcdf-fortran builds ship an empty `fmoddir=` in their
+    # pkg-config file; populate it (via nf-config) so meson can find the Fortran
+    # modules. Idempotent: a no-op if it is already set.
+    pc_fix = Path(__file__).resolve().parent / "update_pc_files.py"
+    print("[get_mf6] checking netcdf-fortran pkg-config (fmoddir)")
+    subprocess.check_call([sys.executable, str(pc_fix)], env=env)
+
     builddir = src / "builddir"
     if builddir.exists():
         shutil.rmtree(builddir)
