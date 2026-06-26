@@ -2,11 +2,10 @@
 name = "wuhan"
 version = "0.1.0"
 channels = ["conda-forge"]
-platforms = ["win-64", "linux-64", "osx-arm64", "osx-64"]
-
-[system-requirements]
-# Needed for the openmpi/petsc stack used by the parallel (extended) MODFLOW 6 build.
-linux = "4.4.0"
+# linux-64 pins a lower __linux (kernel) requirement for the openmpi/petsc
+# stack used by the parallel (extended) MODFLOW 6 build. (Replaces the
+# deprecated [system-requirements] table.)
+platforms = ["win-64", { platform = "linux-64", linux = "4.4.0" }, "osx-arm64", "osx-64"]
 
 [dependencies]
 python = "3.11.*"
