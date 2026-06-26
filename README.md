@@ -1,5 +1,7 @@
 # Wuhan MODFLOW 6/PEST++ class environment
 
+[![CI](https://github.com/jdhughes-dev/wuhan-training/actions/workflows/ci.yml/badge.svg)](https://github.com/jdhughes-dev/wuhan-training/actions/workflows/ci.yml)
+
 A reproducible [pixi](https://pixi.sh) environment for the Wuhan MODFLOW 6/PEST++ class. It provides the scientific Python stack (flopy, pyemu, pypestutils,
 pandas, numpy, scipy, …), the PEST++ suite, and a **parallel (extended) build of
 MODFLOW 6** across Windows, Linux, and macOS (Apple Silicon and Intel).
