@@ -30,7 +30,10 @@ jobs:
       - name: Open pull request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # PAT (or GitHub App token) with contents + pull-requests write, stored
+          # as the PIXI_UPDATE_TOKEN repo secret. Using a PAT (rather than the
+          # default GITHUB_TOKEN) lets the lockfile PR trigger the CI workflow.
+          token: ${{ secrets.PIXI_UPDATE_TOKEN }}
           commit-message: "ci: update pixi lockfile"
           title: "Update pixi lockfile"
           body-path: diff.md
