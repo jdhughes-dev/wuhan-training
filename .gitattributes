@@ -1,0 +1,4 @@
+# Keep shell scripts LF so the Unix activation hook runs regardless of the
+# platform they were committed from.
+*.sh text eol=lf
+*.bat text eol=crlf
