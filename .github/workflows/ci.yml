@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # nightly at 06:00 UTC - also catches the pinned MODFLOW 6 nightly tag
+    # disappearing from the modflow6-nightly-build releases.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install:
+    name: pixi install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up pixi and install the locked environment
+        uses: prefix-dev/setup-pixi@v0.9.6
+        with:
+          locked: true
+          cache: true
+
+      - name: Build/download parallel MODFLOW 6
+        run: pixi run get-mf6
+
+      - name: Verify MODFLOW 6 runs
+        run: pixi run python -c "import shutil, subprocess; exe = shutil.which('mf6'); assert exe, 'mf6 not found on PATH'; print(exe); subprocess.run([exe, '-v'], check=True)"
+
+      - name: Verify Python packages import
+        run: pixi run python -c "import flopy, pyemu, pypestutils, pandas, numpy, scipy, matplotlib, shapely, pyproj; print('flopy', flopy.__version__); print('pyemu', pyemu.__version__)"
+
+      - name: Verify PEST++ is available
+        run: pixi run python -c "import shutil; assert shutil.which('pestpp-ies'), 'pestpp-ies not found on PATH'; print(shutil.which('pestpp-ies'))"
