@@ -43,3 +43,12 @@ jobs:
 
       - name: Verify PEST++ is available
         run: pixi run python -c "import shutil; assert shutil.which('pestpp-ies'), 'pestpp-ies not found on PATH'; print(shutil.which('pestpp-ies'))"
+
+      - name: Clone notebook repos
+        run: pixi run get-notebooks
+
+      - name: Re-run notebook sync (up-to-date / idempotent path)
+        run: pixi run get-notebooks
+
+      - name: Verify notebooks were cloned
+        run: pixi run python -c "import os; assert os.path.isdir(os.path.join('GMDSI_notebooks', '.git')), 'GMDSI_notebooks not cloned'; print('notebooks ok')"

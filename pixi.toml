@@ -41,8 +41,11 @@ vscode = "code ."
 # Build/download the parallel (extended) MODFLOW 6 for the current platform.
 # Idempotent: does nothing if `mf6` is already on PATH. Pass --force to rebuild.
 get-mf6 = "python scripts/get_mf6.py"
-# Clone the GMDSI tutorial notebooks into ./GMDSI_notebooks (pulls if present).
-get-notebooks = "python scripts/get_notebooks.py"
+# Clone or update the tutorial notebook repos (one dir per repo, named after
+# it). Re-running checks each repo and fast-forwards, or discards local changes
+# and resets to the remote if it can't fast-forward. Add more repo URLs here to
+# sync them with the same task.
+get-notebooks = "python scripts/sync_repo.py https://github.com/gmdsi/GMDSI_notebooks.git"
 
 # --- Auto-install parallel (extended) MODFLOW 6 ---------------------------
 # conda-forge does NOT ship a parallel-enabled mf6, so we provide it ourselves:
