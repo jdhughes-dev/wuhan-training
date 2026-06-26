@@ -221,3 +221,6 @@ __marimo__/
 /modflow6/
 /win64ext/
 /win64ext.zip
+
+# GMDSI notebooks (cloned by scripts/get_notebooks.py)
+/GMDSI_notebooks/
