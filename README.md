@@ -10,10 +10,11 @@ MODFLOW 6** across Windows, Linux, and macOS (Apple Silicon and Intel).
 
 You only need to do this once per machine.
 
-> **Requires pixi ≥ 0.71.** This repo uses the newer manifest syntax and
-> lockfile format (v7); older pixi versions cannot read them.
+> **Requires pixi ≥ 0.71.2.** This repo uses the newer manifest syntax
+> (per-platform virtual packages) and lockfile format (v7); older pixi versions
+> cannot read them.
 
-**Already have pixi?** Check your version and update if it is older than 0.71:
+**Already have pixi?** Check your version and update if it is older than 0.71.2:
 
 ```bash
 pixi --version
@@ -55,7 +56,7 @@ curl -fsSL https://pixi.sh/install.sh | sh
 ```
 
 After installing, **open a new terminal** so that `pixi` is on your `PATH`.
-Verify with (should report 0.71 or newer):
+Verify with (should report 0.71.2 or newer):
 
 ```bash
 pixi --version

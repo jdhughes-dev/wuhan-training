@@ -51,6 +51,10 @@ jobs:
         run: pixi run python -c "import shutil; assert shutil.which('pestpp-ies'), 'pestpp-ies not found on PATH'; print(shutil.which('pestpp-ies'))"
 
       - name: Install MODFLOW executables (mp7, gridgen, triangle)
+        # get-modflow queries the GitHub API for the release; authenticate to
+        # avoid the low unauthenticated rate limit (HTTP 403) on shared runners.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pixi run get-exes
 
       - name: Clone notebook repos
