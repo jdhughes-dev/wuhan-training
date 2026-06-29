@@ -28,7 +28,7 @@ jobs:
           pixi update --json | pixi exec pixi-diff-to-markdown >> diff.md
 
       - name: Open pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           # PAT (or GitHub App token) with contents + pull-requests write, stored
           # as the PIXI_UPDATE_TOKEN repo secret. Using a PAT (rather than the
