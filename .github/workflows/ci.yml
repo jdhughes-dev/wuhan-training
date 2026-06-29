@@ -19,9 +19,9 @@ jobs:
     name: pixi install (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     env:
-      # Build MODFLOW 6 only in the explicit step below, not from the activation
-      # hook on every `pixi run`.
-      WUHAN_SKIP_MF6_BUILD: "1"
+      # Disable the activation-hook auto-install (mf6 build + get-modflow exes);
+      # CI runs the get-mf6 / get-exes tasks explicitly in their own steps.
+      WUHAN_SKIP_AUTOINSTALL: "1"
     strategy:
       fail-fast: false
       matrix:
