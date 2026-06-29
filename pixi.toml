@@ -2,10 +2,19 @@
 name = "wuhan"
 version = "0.1.0"
 channels = ["conda-forge"]
-# linux-64 pins a lower __linux (kernel) requirement for the openmpi/petsc
-# stack used by the parallel (extended) MODFLOW 6 build. (Replaces the
-# deprecated [system-requirements] table.)
-platforms = ["win-64", { platform = "linux-64", linux = "4.4.0" }, "osx-arm64", "osx-64"]
+# Per-platform virtual-package requirements (replaces the deprecated
+# [system-requirements] table):
+#  - linux-64 pins a lower __linux (kernel) version for the openmpi/petsc stack
+#    used by the parallel (extended) MODFLOW 6 build.
+#  - the macOS versions make pixi select pypestutils' macOS wheels (which target
+#    macosx_14_0_arm64 / macosx_13_0_x86_64) instead of falling back to the
+#    no-binary sdist.
+platforms = [
+    "win-64",
+    { platform = "linux-64", linux = "4.4.0" },
+    { platform = "osx-arm64", macos = "14.0" },
+    "osx-64",
+]
 
 [dependencies]
 python = "3.11.*"
@@ -49,7 +58,10 @@ get-notebooks = "python scripts/sync_repo.py https://github.com/gmdsi/GMDSI_note
 # Install the USGS MODFLOW-family executables that the notebooks need but that
 # aren't provided by mf6/pestpp, into the env (on PATH) via flopy's get-modflow.
 # (mf6 comes from get-mf6 (extended); pestpp comes from conda.)
-get-exes = "get-modflow --subset mp7,gridgen,triangle :python"
+# release 25.0 is the last MODFLOW-ORG/executables release that ships x86_64
+# macOS binaries (mac.zip); newer releases are arm64-only (macarm.zip), which
+# would be "Bad CPU type" on an Intel mac. 25.0 has linux/win/mac/macarm.
+get-exes = "get-modflow --subset mp7,gridgen,triangle --release-id 25.0 :python"
 
 # --- Auto-install parallel (extended) MODFLOW 6 ---------------------------
 # conda-forge does NOT ship a parallel-enabled mf6, so we provide it ourselves:
