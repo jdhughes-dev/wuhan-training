@@ -50,6 +50,9 @@ jobs:
       - name: Verify PEST++ is available
         run: pixi run python -c "import shutil; assert shutil.which('pestpp-ies'), 'pestpp-ies not found on PATH'; print(shutil.which('pestpp-ies'))"
 
+      - name: Install MODFLOW executables (mp7, gridgen, triangle)
+        run: pixi run get-exes
+
       - name: Clone notebook repos
         run: pixi run get-notebooks
 
@@ -58,3 +61,6 @@ jobs:
 
       - name: Verify notebooks were cloned
         run: pixi run python -c "import os; missing = [d for d in ('GMDSI_notebooks', 'mf6-training') if not os.path.isdir(os.path.join(d, '.git'))]; assert not missing, 'not cloned ' + str(missing); print('notebooks ok')"
+
+      - name: Run GMDSI pstfrom tutorial notebook
+        run: pixi run python scripts/run_notebook.py GMDSI_notebooks/tutorials/part2_01_pstfrom_pest_setup/freyberg_pstfrom_pest_setup.ipynb 1800

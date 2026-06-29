@@ -46,6 +46,10 @@ get-mf6 = "python scripts/get_mf6.py"
 # and resets to the remote if it can't fast-forward. Add more repo URLs here to
 # sync them with the same task.
 get-notebooks = "python scripts/sync_repo.py https://github.com/gmdsi/GMDSI_notebooks.git https://github.com/jdhughes-dev/mf6-training.git"
+# Install the USGS MODFLOW-family executables that the notebooks need but that
+# aren't provided by mf6/pestpp, into the env (on PATH) via flopy's get-modflow.
+# (mf6 comes from get-mf6 (extended); pestpp comes from conda.)
+get-exes = "get-modflow --subset mp7,gridgen,triangle :python"
 
 # --- Auto-install parallel (extended) MODFLOW 6 ---------------------------
 # conda-forge does NOT ship a parallel-enabled mf6, so we provide it ourselves:
