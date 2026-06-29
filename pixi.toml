@@ -58,10 +58,10 @@ get-notebooks = "python scripts/sync_repo.py https://github.com/gmdsi/GMDSI_note
 # Install the USGS MODFLOW-family executables that the notebooks need but that
 # aren't provided by mf6/pestpp, into the env (on PATH) via flopy's get-modflow.
 # (mf6 comes from get-mf6 (extended); pestpp comes from conda.)
-# release 25.0 is the last MODFLOW-ORG/executables release that ships x86_64
-# macOS binaries (mac.zip); newer releases are arm64-only (macarm.zip), which
-# would be "Bad CPU type" on an Intel mac. 25.0 has linux/win/mac/macarm.
-get-exes = "get-modflow --subset mp7,gridgen,triangle --release-id 25.0 :python"
+# NOTE: USGS no longer publishes x86_64 macOS binaries (executables release
+# >= 26.0 are arm64-only), so this won't work on an Intel mac. Use win-64,
+# linux-64 or Apple-Silicon macs.
+get-exes = "get-modflow --subset mp7,gridgen,triangle :python"
 
 # --- Auto-install parallel (extended) MODFLOW 6 ---------------------------
 # conda-forge does NOT ship a parallel-enabled mf6, so we provide it ourselves:
