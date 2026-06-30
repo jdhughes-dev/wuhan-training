@@ -5,7 +5,7 @@ Usage:
     python scripts/sync_repo.py <repo-url> [<repo-url> ...]
 
 For each URL, the repo is checked out into ``<PIXI_PROJECT_ROOT>/<repo-name>``
-(the directory takes the repo's name, e.g. GMDSI_notebooks):
+(the directory takes the repo's name, e.g. mf6-training):
 
   * missing            -> clone it.
   * present, up to date -> do nothing.

@@ -1,10 +1,13 @@
-# Wuhan MODFLOW 6/PEST++ class environment
+# Wuhan MODFLOW 6 class environment
 
 [![CI](https://github.com/jdhughes-dev/wuhan-training/actions/workflows/ci.yml/badge.svg)](https://github.com/jdhughes-dev/wuhan-training/actions/workflows/ci.yml)
 
-A reproducible [pixi](https://pixi.sh) environment for the Wuhan MODFLOW 6/PEST++ class. It provides the scientific Python stack (flopy, pyemu, pypestutils,
-pandas, numpy, scipy, …), the PEST++ suite, and a **parallel (extended) build of
-MODFLOW 6** across Windows, Linux, and macOS (Apple Silicon and Intel).
+A reproducible [pixi](https://pixi.sh) environment for the Wuhan MODFLOW 6 class.
+It provides the scientific Python stack (flopy, modflowapi, pandas, numpy, scipy,
+matplotlib, …) for building, running, and analyzing MODFLOW 6 models in notebooks
+or scripts, plus a **parallel (extended) build of MODFLOW 6** (including the
+`libmf6` shared library that modflowapi drives) across Windows, Linux, and macOS
+(Apple Silicon and Intel).
 
 ## 1. Install pixi
 
@@ -107,7 +110,7 @@ pixi run vscode
 ```
 
 Drop into a shell with the environment activated (so `python`, `mf6`,
-`pestpp-ies`, etc. are all on `PATH`):
+`mp7`, etc. are all on `PATH`):
 
 ```bash
 pixi shell
@@ -116,7 +119,7 @@ pixi shell
 Run a one-off command in the environment without activating a shell:
 
 ```bash
-pixi run python -c "import flopy, pyemu; print(flopy.__version__)"
+pixi run python -c "import flopy, modflowapi; print(flopy.__version__)"
 pixi run mf6 -v
 ```
 
@@ -129,9 +132,9 @@ pixi run mf6 -v
 | macOS Apple Silicon | `osx-arm64` |
 | macOS Intel | `osx-64` |
 
-CI (GitHub Actions) installs the environment and verifies MODFLOW 6, PEST++, and
-the Python packages on all four platforms on every push and pull request, plus a
-nightly run.
+CI (GitHub Actions) installs the environment and verifies MODFLOW 6 (including
+that modflowapi can load `libmf6`) and the Python packages on all four platforms
+on every push and pull request, plus a nightly run.
 
 ## Notes
 
