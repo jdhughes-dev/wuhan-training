@@ -33,18 +33,21 @@ def conda_prefix() -> Path:
 def find_libmf6(prefix: Path) -> Path:
     if sys.platform.startswith("win"):
         name = "libmf6.dll"
-        dirs = ["bin", "Library/bin"]
     elif sys.platform == "darwin":
         name = "libmf6.dylib"
-        dirs = ["lib", "bin"]
     else:
         name = "libmf6.so"
-        dirs = ["lib", "bin"]
-    for d in dirs:
+    # Check the usual locations first (fast path), then fall back to a recursive
+    # search. meson installs the Linux .so under a multiarch subdir such as
+    # lib/x86_64-linux-gnu, which a fixed-dir list would miss.
+    for d in ("bin", "Library/bin", "lib"):
         candidate = prefix / d / name
         if candidate.exists():
             return candidate
-    sys.exit(f"[check_libmf6] {name} not found under {prefix} (looked in {dirs}); "
+    matches = sorted(prefix.rglob(name))
+    if matches:
+        return matches[0]
+    sys.exit(f"[check_libmf6] {name} not found anywhere under {prefix}; "
              "run `pixi run get-mf6 --force` to (re)install MODFLOW 6.")
 
 
