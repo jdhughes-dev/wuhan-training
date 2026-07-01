@@ -45,10 +45,10 @@ jobs:
         run: pixi run python -c "import shutil, subprocess; exe = shutil.which('mf6'); assert exe, 'mf6 not found on PATH'; print(exe); subprocess.run([exe, '-v'], check=True)"
 
       - name: Verify Python packages import
-        run: pixi run python -c "import flopy, pyemu, pypestutils, pandas, numpy, scipy, matplotlib, shapely, pyproj; print('flopy', flopy.__version__); print('pyemu', pyemu.__version__)"
+        run: pixi run python -c "import flopy, modflowapi, pandas, numpy, scipy, matplotlib, shapely, pyproj; print('flopy', flopy.__version__); print('modflowapi', modflowapi.__version__)"
 
-      - name: Verify PEST++ is available
-        run: pixi run python -c "import shutil; assert shutil.which('pestpp-ies'), 'pestpp-ies not found on PATH'; print(shutil.which('pestpp-ies'))"
+      - name: Verify modflowapi can load the MODFLOW 6 shared library (libmf6)
+        run: pixi run python scripts/check_libmf6.py
 
       - name: Install MODFLOW executables (mp7, gridgen, triangle)
         # Skipped on Intel mac: USGS publishes no x86_64 macOS binaries anymore.
@@ -66,12 +66,4 @@ jobs:
         run: pixi run get-notebooks
 
       - name: Verify notebooks were cloned
-        run: pixi run python -c "import os; missing = [d for d in ('GMDSI_notebooks', 'mf6-training') if not os.path.isdir(os.path.join(d, '.git'))]; assert not missing, 'not cloned ' + str(missing); print('notebooks ok')"
-
-      - name: Run GMDSI pstfrom tutorial notebook
-        # Skipped on Intel mac: USGS no longer ships working x86_64 mac MODFLOW
-        # binaries (release 25.0 mp7 hardcodes a Homebrew gcc@12 libgcc_s path
-        # that is absent on a clean runner). The notebook runs on linux, windows
-        # and macOS-arm64; Intel mac still gets the full env install/build above.
-        if: matrix.os != 'macos-15-intel'
-        run: pixi run python scripts/run_notebook.py GMDSI_notebooks/tutorials/part2_01_pstfrom_pest_setup/freyberg_pstfrom_pest_setup.ipynb 1800
+        run: pixi run python -c "import os; assert os.path.isdir(os.path.join('mf6-training', '.git')), 'mf6-training not cloned'; print('notebooks ok')"

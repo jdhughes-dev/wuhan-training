@@ -6,9 +6,8 @@ channels = ["conda-forge"]
 # [system-requirements] table):
 #  - linux-64 pins a lower __linux (kernel) version for the openmpi/petsc stack
 #    used by the parallel (extended) MODFLOW 6 build.
-#  - the macOS versions make pixi select pypestutils' macOS wheels (which target
-#    macosx_14_0_arm64 / macosx_13_0_x86_64) instead of falling back to the
-#    no-binary sdist.
+#  - the macOS minimums keep resolution on recent SDKs so conda-forge can supply
+#    the openmpi/petsc binaries the extended MODFLOW 6 build links against.
 platforms = [
     "win-64",
     { platform = "linux-64", linux = "4.4.0" },
@@ -19,10 +18,8 @@ platforms = [
 [dependencies]
 python = "3.11.*"
 pandas = ">=2.0,<3.0"
-numpy = "<2"
+numpy = "*"
 matplotlib = "*"
-openpyxl = "*"
-xlrd = "*"
 jupyter = "*"
 jupyterlab = "*"
 notebook = "*"
@@ -31,16 +28,13 @@ shapely = "*"
 rtree = "*"
 pyproj = ">=2.0"
 pyshp = "*"
-psutil = "*"
 git = "*"
 nbconvert = "*"
+# Core MODFLOW 6 stack: flopy to build/post-process models and modflowapi to
+# drive a running MODFLOW 6 through the libmf6 shared library (installed by the
+# get-mf6 task / activation hook).
 flopy = "*"
-pyemu = "*"
-pestpp = "*"
-
-# pypestutils is not available on conda-forge, so it must come from PyPI.
-[pypi-dependencies]
-pypestutils = "*"
+modflowapi = "*"
 
 [tasks]
 # Launch JupyterLab in the project directory.
@@ -54,10 +48,11 @@ get-mf6 = "python scripts/get_mf6.py"
 # it). Re-running checks each repo and fast-forwards, or discards local changes
 # and resets to the remote if it can't fast-forward. Add more repo URLs here to
 # sync them with the same task.
-get-notebooks = "python scripts/sync_repo.py https://github.com/gmdsi/GMDSI_notebooks.git https://github.com/jdhughes-dev/mf6-training.git"
+get-notebooks = "python scripts/sync_repo.py https://github.com/jdhughes-dev/mf6-training.git"
 # Install the USGS MODFLOW-family executables that the notebooks need but that
-# aren't provided by mf6/pestpp, into the env (on PATH) via flopy's get-modflow.
-# (mf6 comes from get-mf6 (extended); pestpp comes from conda.)
+# aren't provided by mf6, into the env (on PATH) via flopy's get-modflow:
+# mp7 (MODPATH 7) for particle tracking, plus gridgen/triangle for unstructured
+# grid generation. (mf6 itself comes from the get-mf6 (extended) task.)
 # NOTE: USGS no longer publishes x86_64 macOS binaries (executables release
 # >= 26.0 are arm64-only), so this won't work on an Intel mac. Use win-64,
 # linux-64 or Apple-Silicon macs.
